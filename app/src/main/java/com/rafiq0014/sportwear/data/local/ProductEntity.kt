@@ -14,7 +14,8 @@ data class ProductEntity(
     val brand: String,
     val category: String,
     val stock: Int,
-    val size: String
+    val size: String,
+    val isSynced: Boolean
 )
 
 fun ProductEntity.toProduct() = com.rafiq0014.sportwear.data.model.Product(
@@ -27,5 +28,6 @@ fun ProductEntity.toProduct() = com.rafiq0014.sportwear.data.model.Product(
     brand = brand,
     category = category,
     stock = stock,
-    size = size
+    size = size,
+    isSynced = isSynced
 )

@@ -27,7 +27,8 @@ class DefaultAppContainer(private val context: Context) : AppContainer {
         ProductRepository(
             apiService = RetrofitClient.apiService,
             imgBBService = RetrofitClient.imgBBService,
-            productDao = AppDatabase.getDatabase(context).productDao()
+            productDao = AppDatabase.getDatabase(context).productDao(),
+            context = context
         )
     }
 }

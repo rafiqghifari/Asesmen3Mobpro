@@ -27,4 +27,10 @@ interface ProductDao {
     
     @Query("DELETE FROM products")
     fun clearAll()
+
+    @Query("SELECT * FROM products WHERE isSynced = 0")
+    fun getUnsyncedProducts(): List<ProductEntity>
+
+    @Query("DELETE FROM products WHERE isSynced = 1")
+    fun deleteSyncedProducts(): Int
 }

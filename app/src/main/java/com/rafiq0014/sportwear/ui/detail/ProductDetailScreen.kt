@@ -31,11 +31,13 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -57,7 +59,9 @@ fun ProductDetailScreen(
     navigateBack: () -> Unit,
     navigateToEdit: (String) -> Unit
 ) {
+    val context = LocalContext.current
     val product = viewModel.getProductById(productId)
+    val isOffline by viewModel.isOffline.collectAsState()
     var showDeleteConfirm by remember { mutableStateOf(false) }
 
     if (product == null) {
@@ -102,11 +106,35 @@ fun ProductDetailScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { showDeleteConfirm = true }) {
-                        Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete), tint = MaterialTheme.colorScheme.error)
+                    IconButton(
+                        onClick = {
+                            if (isOffline) {
+                                android.widget.Toast.makeText(context, "Tidak dapat menghapus produk saat offline", android.widget.Toast.LENGTH_SHORT).show()
+                            } else {
+                                showDeleteConfirm = true
+                            }
+                        }
+                    ) {
+                        Icon(
+                            Icons.Default.Delete,
+                            contentDescription = stringResource(R.string.delete),
+                            tint = if (isOffline) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.error
+                        )
                     }
-                    IconButton(onClick = { navigateToEdit(productId) }) {
-                        Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.edit))
+                    IconButton(
+                        onClick = {
+                            if (isOffline) {
+                                android.widget.Toast.makeText(context, "Tidak dapat mengubah produk saat offline", android.widget.Toast.LENGTH_SHORT).show()
+                            } else {
+                                navigateToEdit(productId)
+                            }
+                        }
+                    ) {
+                        Icon(
+                            Icons.Default.Edit,
+                            contentDescription = stringResource(R.string.edit),
+                            tint = if (isOffline) MaterialTheme.colorScheme.outline else MaterialTheme.colorScheme.onSurface
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

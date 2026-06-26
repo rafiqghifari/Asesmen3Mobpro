@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "https://example.com/api/" // Replace with actual MockAPI URL
+    private const val BASE_URL = "https://6a3e1bef0443193a1a0b7119.mockapi.io/api/v1/" // Replace with actual MockAPI URL
 
     private val moshi = Moshi.Builder()
         .add(KotlinJsonAdapterFactory())
